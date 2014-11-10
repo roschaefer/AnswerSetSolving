@@ -4,8 +4,8 @@ val(1..9).
 
 sudoku(X,Y,N) :- initial(X,Y,N).
 
-9*9 {sudoku(X,Y,N) : row(X), col(Y), val(N)} 9*9.
-
+1 { sudoku(1..9,I,N) } 1 :- I=1..9, N=1..9.
+1 { sudoku(J,1..9,M) } 1 :- J=1..9, M=1..9.
 
 :- sudoku(X,Y,I), sudoku(X,Y,J), I != J.
 :- sudoku(X,Y1,N), sudoku(X,Y2,N), Y1 != Y2.
