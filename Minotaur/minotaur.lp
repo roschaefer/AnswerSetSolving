@@ -1,0 +1,1 @@
+at(X,Y,0) :- start(X,Y).
