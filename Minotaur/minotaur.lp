@@ -9,6 +9,8 @@ at(X,Y,0) :- start(X,Y).
 
 % no duplicate step numbers
 :- at(X1,Y1,N1), at(X2,Y2,N2), (X1,Y1) != (X2,Y2), N1 == N2.
+% every step needs a predecessor
+:- at(_,_,N), N!=0, not at(_,_,N-1).
 
 % we can't go diagonal
 :- at(X1,Y1,N1), at(X2,Y2,N2), (N1+1) == N2, X1!=X2, Y1!=Y2.
