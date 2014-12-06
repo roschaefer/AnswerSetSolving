@@ -7,22 +7,29 @@ at(X,Y,0) :- start(X,Y).
 % we must reach the goal
 :- goal(X,Y), not at(X,Y,_).
 
+
+move(X,Y,N,t) :- at(X,Y,N).
+
+%%%%                      %%%%
+%%%% Movement Constraints %%%%
+%%%%                      %%%%
+
 % no duplicate step numbers
-:- at(X1,Y1,N1), at(X2,Y2,N2), (X1,Y1) != (X2,Y2), N1 == N2.
+:- move(X1,Y1,N1,_), move(X2,Y2,N2,_), (X1,Y1) != (X2,Y2), N1 == N2.
 % every step needs a predecessor
-:- at(_,_,N), N!=0, not at(_,_,N-1).
+:- move(_,_,N,_), N!=0, not move(_,_,N-1,_).
 
 % we can't go diagonal
-:- at(X1,Y1,N1), at(X2,Y2,N2), (N1+1) == N2, X1!=X2, Y1!=Y2.
+:- move(X1,Y1,N1,_), move(X2,Y2,N2,_), (N1+1) == N2, X1!=X2, Y1!=Y2.
 % we can't go more than one field in x-direction
-:- at(X1,Y1,N1), at(X2,Y2,N2), (N1+1) == N2, ((X1-X2) * (X1-X2)) > 1.
+:- move(X1,Y1,N1,_), move(X2,Y2,N2,_), (N1+1) == N2, ((X1-X2) * (X1-X2)) > 1.
 % we can't go more than one field in y-direction
-:- at(X1,Y1,N1), at(X2,Y2,N2), (N1+1) == N2, ((Y1-Y2) * (Y1-Y2)) > 1.
+:- move(X1,Y1,N1,_), move(X2,Y2,N2,_), (N1+1) == N2, ((Y1-Y2) * (Y1-Y2)) > 1.
 
 % we can't go through a wall
-:- wall(WX1, WY1, WX2, WY2), at(X1,Y1,N1), at(X2,Y2,N2), (N1+1) == N2, (WX1, WY1) == (X1, Y1), (WX2,WY2) == (X2,Y2).
+:- wall(WX1, WY1, WX2, WY2), move(X1,Y1,N1,_), move(X2,Y2,N2,_), (N1+1) == N2, (WX1, WY1) == (X1, Y1), (WX2,WY2) == (X2,Y2).
 % we can't go through a wall, not even in the other direction
-:- wall(WX1, WY1, WX2, WY2), at(X1,Y1,N1), at(X2,Y2,N2), (N1+1) == N2, (WX1, WY1) == (X2, Y2), (WX2,WY2) == (X1,Y1).
+:- wall(WX1, WY1, WX2, WY2), move(X1,Y1,N1,_), move(X2,Y2,N2,_), (N1+1) == N2, (WX1, WY1) == (X2, Y2), (WX2,WY2) == (X1,Y1).
 
 
 
