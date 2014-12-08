@@ -2,8 +2,8 @@
 at(X,Y,0) :- start(X,Y).
 { at(X,Y,1..(S+1)) : field(X,Y) } S+1  :- maxsteps(S).
 
-% we must reach the goal
-:- goal(X,Y), not at(X,Y,_).
+% the last step must reach the goal!
+:- at(X,Y,S), not at(_,_,S+1), not goal(X,Y).
 
 
 move(X,Y,N,t) :- at(X,Y,N).
