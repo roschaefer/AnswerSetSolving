@@ -1,6 +1,6 @@
 % the first position is the start position
 at(X,Y,0) :- start(X,Y).
-{ at(X,Y,1..(S+1)) : field(X,Y) } S+1  :- maxsteps(S).
+{ at(X,Y,1..(S)) : field(X,Y) } S  :- maxsteps(S).
 
 % the last step must reach the goal!
 :- at(X,Y,S), not at(_,_,S+1), not goal(X,Y).
