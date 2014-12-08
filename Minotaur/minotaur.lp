@@ -32,6 +32,8 @@ move(MX, MY+1, N, m) :- at(TX,TY,N), move(MX,MY,N-1,m), TX == MX, TY > MY, not w
 move(MX, MY, N, m) :- at(TX,TY,N), move(MX,MY,N-1,m), TX == MX, TY < MY, wall(MX,MY-1,MX,MY).
 move(MX, MY, N, m) :- at(TX,TY,N), move(MX,MY,N-1,m), TX == MX, TY > MY, wall(MX,MY,MX,MY+1).
 
+% stay there if theseus moved on the same field
+move(X,Y,N,m):- at(X,Y,N), move(X,Y,N-1,m).
 
 
 %%%%                      %%%%
