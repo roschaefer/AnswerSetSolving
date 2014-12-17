@@ -5,7 +5,6 @@
 % the first position is the start position
 at(X,Y,0) :- start(X,Y).
 { at(X,Y,1..(S)) : field(X,Y) } S  :- maxsteps(S).
-#minimize{1:at(_,_,_)}.
 
 
 
@@ -42,9 +41,6 @@ at(X,Y,0) :- start(X,Y).
 % just one step can reach the goal
 :- at(X,Y,S1), at(X,Y,S2), S1!=S2, goal(X,Y).
 
-% minimize steps of theseus
-#minimize{1:at(_,_,_)}.
-
 
 % the minotaur must not eat us!
 :- mino_at(X,Y,2*N), at(X,Y,N).
@@ -79,14 +75,20 @@ no_horizontal_movement(N):- want(right,N), not can(right,N).
 no_horizontal_movement(N):- want(up,N), not want(left,N), not want(right,N).
 no_horizontal_movement(N):- want(down,N), not want(left,N), not want(right,N).
 
+
+no_vertical_movement(N):- want(up, N), not can(up, N).
+no_vertical_movement(N):- want(down, N), not can(down, N).
+no_vertical_movement(N):- want(left,N), not want(up, N), not want(down, N).
+no_vertical_movement(N):- want(right,N), not want(up, N), not want(down, N).
+
 going(left,N)  :- want(left,N),     can (left,N).
 going(right,N) :- want(right,N),    can (right,N).
 going(up,N)    :- want(up,N),       can (up,N),   no_horizontal_movement(N).
 going(down,N)  :- want(down,N),     can (down,N), no_horizontal_movement(N).
 going(none,N)  :- want(up,N),   not can (up,N),   no_horizontal_movement(N).
 going(none,N)  :- want(down,N), not can (down,N), no_horizontal_movement(N).
-going(none,N)  :- want(left,N),   not can (left,N).
-going(none,N)  :- want(right,N),  not can (right,N).
+going(none,N)  :- want(left,N),   not can (left,N), no_vertical_movement(N).
+going(none,N)  :- want(right,N),  not can (right,N), no_vertical_movement(N).
 going(none,N)  :- want(none,N).
 
 mino_at(X,Y,N+1)  :- mino_at(X,Y,N), going(none,N+1).
@@ -98,4 +100,3 @@ mino_at(X,Y+1,N+1):- mino_at(X,Y,N), going(down,N+1).
 
 
 #show at/3.
-#show mino_at/3.
