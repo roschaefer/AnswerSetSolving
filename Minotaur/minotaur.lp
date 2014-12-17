@@ -80,6 +80,8 @@ going(up,N)    :- want(up,N),       can (up,N),   no_horizontal_movement(N).
 going(down,N)  :- want(down,N),     can (down,N), no_horizontal_movement(N).
 going(none,N)  :- want(up,N),   not can (up,N),   no_horizontal_movement(N).
 going(none,N)  :- want(down,N), not can (down,N), no_horizontal_movement(N).
+going(none,N)  :- want(left,N),   not can (left,N).
+going(none,N)  :- want(right,N),  not can (right,N).
 going(none,N)  :- want(none,N).
 
 mino_at(X,Y,N+1)  :- mino_at(X,Y,N), going(none,N+1).
