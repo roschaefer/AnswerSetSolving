@@ -5,6 +5,7 @@
 % the first position is the start position
 at(X,Y,0) :- start(X,Y).
 { at(X,Y,1..(S)) : field(X,Y) } S  :- maxsteps(S).
+#minimize{1:at(_,_,_)}.
 
 
 
@@ -40,6 +41,10 @@ at(X,Y,0) :- start(X,Y).
 :- at(X,Y,S), not at(_,_,S+1), not goal(X,Y).
 % just one step can reach the goal
 :- at(X,Y,S1), at(X,Y,S2), S1!=S2, goal(X,Y).
+
+% minimize steps of theseus
+#minimize{1:at(_,_,_)}.
+
 
 % the minotaur must not eat us!
 :- mino_at(X,Y,2*N), at(X,Y,N).
