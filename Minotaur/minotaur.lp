@@ -64,8 +64,8 @@ can(down,N+1)  :- mino_at(X,Y,N), not wall(X,Y,X,Y+1).
 
 want(left,N+1)  :- mino_at(MX,_,N),  at(TX,_,N+1), MX>TX.
 want(right,N+1) :- mino_at(MX,_,N),  at(TX,_,N+1), MX<TX.
-want(up,N+1)    :- mino_at(_,MY,N),  at(_,TY,N+1), MY>TY.
-want(down,N+1)  :- mino_at(_,MY,N),  at(_,TY,N+1), MY<TY.
+want(up,N+1)    :- mino_at(_,MY,N),  at(_,TY,N+1), MY>TY.               % wrong??? MY<TY
+want(down,N+1)  :- mino_at(_,MY,N),  at(_,TY,N+1), MY<TY.               % wrong??? MY>TY 
 want(none,N+1)  :- mino_at(MX,MY,N), at(TX,TY,N+1), (MX,MY) == (TX,TY).
 
 % auxiliary method to reduce code duplication
