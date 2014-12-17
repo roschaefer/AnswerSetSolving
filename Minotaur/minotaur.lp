@@ -41,6 +41,10 @@ at(X,Y,0) :- start(X,Y).
 % just one step can reach the goal
 :- at(X,Y,S1), at(X,Y,S2), S1!=S2, goal(X,Y).
 
+% minimize steps of theseus
+#minimize{1:at(_,_,_)}.
+
+
 % the minotaur must not eat us!
 :- mino_at(X,Y,N), at(X,Y,N).
 
