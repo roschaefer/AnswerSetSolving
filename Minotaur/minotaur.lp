@@ -5,7 +5,7 @@
 % the first position is the start position
 at(X,Y,0) :- start(X,Y).
 { at(X,Y,1..(S)) : field(X,Y) } S  :- maxsteps(S).
-
+#minimize{1,S: at(_,_,S)}.
 
 
 %%%%                    %%%%
