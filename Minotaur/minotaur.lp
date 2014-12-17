@@ -42,7 +42,7 @@ at(X,Y,0) :- start(X,Y).
 :- at(X,Y,S1), at(X,Y,S2), S1!=S2, goal(X,Y).
 
 % the minotaur must not eat us!
-:- mino_at(X,Y,N), doubled_theseus(X,Y,N).
+:- mino_at(X,Y,2*N), at(X,Y,N).
 
 
 
@@ -55,7 +55,7 @@ mino_at(X,Y,0) :- mino(X,Y).
 
 % where is theseus in the current mino-step?
 doubled_theseus(X,Y,2*N) :- at(X,Y,N).
-doubled_theseus(X,Y,2*N-1) :- at(X,Y,N).
+doubled_theseus(X,Y,2*N-1) :- at(X,Y,N), N !=0.
 
 can(left,N+1)  :- mino_at(X,Y,N), not wall(X-1,Y,X,Y).
 can(right,N+1) :- mino_at(X,Y,N), not wall(X,Y,X+1,Y).
