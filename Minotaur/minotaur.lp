@@ -42,7 +42,7 @@ at(X,Y,0) :- start(X,Y).
 :- at(X,Y,S1), at(X,Y,S2), S1!=S2, goal(X,Y).
 
 % the minotaur must not eat us!
-:- mino_at(X,Y,N), at(X,Y,N).
+:- mino_at(X,Y,N), doubled_theseus(X,Y,N).
 
 
 
@@ -53,16 +53,20 @@ at(X,Y,0) :- start(X,Y).
 % minotaur starts in the mino(...) start position
 mino_at(X,Y,0) :- mino(X,Y).
 
+% where is theseus in the current mino-step?
+doubled_theseus(X,Y,2*N) :- at(X,Y,N).
+doubled_theseus(X,Y,2*N-1) :- at(X,Y,N).
+
 can(left,N+1)  :- mino_at(X,Y,N), not wall(X-1,Y,X,Y).
 can(right,N+1) :- mino_at(X,Y,N), not wall(X,Y,X+1,Y).
 can(up,N+1)    :- mino_at(X,Y,N), not wall(X,Y-1,X,Y).
 can(down,N+1)  :- mino_at(X,Y,N), not wall(X,Y,X,Y+1).
 
-want(left,N+1)  :- mino_at(MX,_,N),  at(TX,_,N+1), MX>TX.
-want(right,N+1) :- mino_at(MX,_,N),  at(TX,_,N+1), MX<TX.
-want(up,N+1)    :- mino_at(_,MY,N),  at(_,TY,N+1), MY>TY.
-want(down,N+1)  :- mino_at(_,MY,N),  at(_,TY,N+1), MY<TY.
-want(none,N+1)  :- mino_at(MX,MY,N), at(TX,TY,N+1), (MX,MY) == (TX,TY).
+want(left,N+1)  :- mino_at(MX,_,N),  doubled_theseus(TX,_,N+1), MX>TX.
+want(right,N+1) :- mino_at(MX,_,N),  doubled_theseus(TX,_,N+1), MX<TX.
+want(up,N+1)    :- mino_at(_,MY,N),  doubled_theseus(_,TY,N+1), MY>TY.
+want(down,N+1)  :- mino_at(_,MY,N),  doubled_theseus(_,TY,N+1), MY<TY.
+want(none,N+1)  :- mino_at(MX,MY,N), doubled_theseus(TX,TY,N+1), (MX,MY) == (TX,TY).
 
 % auxiliary method to reduce code duplication
 no_horizontal_movement(N):- want(left,N),  not can(left,N).
