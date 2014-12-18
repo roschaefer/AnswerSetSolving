@@ -1,50 +1,49 @@
 %%%%            %%%%
 %%%% Generation %%%%
 %%%%            %%%%
+% initial position 
+go(theseus,X,Y,X,Y,0) :- start(X,Y).
 
-% the first position is the start position
+% go right if not already achieved goal field
+go(theseus,X,Y,X+1,Y,S+1) :- go(theseus,_,_,X,Y,S), right(X,Y), S < LS+1, maxsteps(LS), not goal(X,Y).
+
+% go left if not already achieved goal field
+go(theseus,X,Y,X-1,Y,S+1) :- go(theseus,_,_,X,Y,S), left(X,Y), S < LS+1, maxsteps(LS), not goal(X,Y).
+
+% go up if not already achieved goal field
+go(theseus,X,Y,X,Y+1,S+1) :- go(theseus,_,_,X,Y,S), up(X,Y), S < LS+1, maxsteps(LS), not goal(X,Y).
+
+% go down if not already achieved goal field
+go(theseus,X,Y,X,Y-1,S+1) :- go(theseus,_,_,X,Y,S), down(X,Y), S < LS+1, maxsteps(LS), not goal(X,Y).
+
+% stay on field 
+go(theseus,X,Y,X,Y,S+1) :- go(theseus,_,_,X,Y,S), S < LS+1, maxsteps(LS), not goal(X,Y).
+
+
+% it is possible to move from field (X,Y) left/right/up/down
+right(X,Y):- field(X,Y), field(X+1,Y), not wall(X,Y,X+1,Y).
+left(X,Y):- field(X,Y), field(X-1,Y), not wall(X-1,Y,X,Y).
+up(X,Y):- field(X,Y), field(X,Y+1), not wall(X,Y,X,Y+1).
+down(X,Y):- field(X,Y), field(X,Y-1), not wall(X,Y-1,X,Y).
+
+
 at(X,Y,0) :- start(X,Y).
-{ at(X,Y,1..(S)) : field(X,Y) } S  :- maxsteps(S).
+{ at(X,Y,S) : go(theseus,_,_,X,Y,S) } 1 :- S = 1..LS+1, maxsteps(LS).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Testing
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+:- at(X1,Y1,S), not goal(X1,Y1), not at(_,_,S+1).
+:- at(X,Y,S1), at(X,Y,S2), goal(X,Y), S1!=S2.
+:- at(X1,Y1,S), at(X2,Y2,S+1), not go(theseus,X1,Y1,X2,Y2,S+1).
+
+
 #minimize{1,S: at(_,_,S)}.
-
-
-%%%%                    %%%%
-%%%% Theseus' behaviour %%%%
-%%%% Constraint based   %%%%
-%%%%                    %%%%
-
-% no duplicate step numbers
-:- at(X1,Y1,N1), at(X2,Y2,N2), (X1,Y1) != (X2,Y2), N1 == N2.
-% every step needs a predecessor
-:- at(_,_,N), N!=0, not at(_,_,N-1).
-
-% we can't go diagonal
-:- at(X1,Y1,N1), at(X2,Y2,N2), (N1+1) == N2, X1!=X2, Y1!=Y2.
-% we can't go more than one field in x-direction
-:- at(X1,Y1,N1), at(X2,Y2,N2), (N1+1) == N2, ((X1-X2) * (X1-X2)) > 1.
-% we can't go more than one field in y-direction
-:- at(X1,Y1,N1), at(X2,Y2,N2), (N1+1) == N2, ((Y1-Y2) * (Y1-Y2)) > 1.
-
-% we can't go through a wall
-:- wall(WX1, WY1, WX2, WY2), at(X1,Y1,N1), at(X2,Y2,N2), (N1+1) == N2, (WX1, WY1) == (X1, Y1), (WX2,WY2) == (X2,Y2).
-% we can't go through a wall, not even in the other direction
-:- wall(WX1, WY1, WX2, WY2), at(X1,Y1,N1), at(X2,Y2,N2), (N1+1) == N2, (WX1, WY1) == (X2, Y2), (WX2,WY2) == (X1,Y1).
-
-
-
-%%%                               %%%
-%%% Solution specific constraints %%%
-%%%                               %%%
-
-% the last step must reach the goal!
-:- at(X,Y,S), not at(_,_,S+1), not goal(X,Y).
-% just one step can reach the goal
-:- at(X,Y,S1), at(X,Y,S2), S1!=S2, goal(X,Y).
 
 
 % the minotaur must not eat us!
 :- mino_at(X,Y,2*N), at(X,Y,N).
-
 
 
 %%%%                      %%%%
