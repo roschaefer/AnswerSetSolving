@@ -35,7 +35,7 @@ at(X,Y,0) :- start(X,Y).
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 :- at(X1,Y1,S), not goal(X1,Y1), not at(_,_,S+1).
-:- at(X,Y,S1), at(X,Y,S2), goal(X,Y), S1!=S2.
+:- at(X,Y,S1), at(X,Y,S2), goal(X,Y), S1<S2.
 :- at(X1,Y1,S), at(X2,Y2,S+1), not go(theseus,X1,Y1,X2,Y2,S+1).
 
 
@@ -90,11 +90,11 @@ going(none,N)  :- want(left,N),   not can (left,N), no_vertical_movement(N).
 going(none,N)  :- want(right,N),  not can (right,N), no_vertical_movement(N).
 going(none,N)  :- want(none,N).
 
-mino_at(X,Y,N+1)  :- field(X,Y),   N+1 < S, maxsteps(S), mino_at(X,Y,N), going(none,N+1).
-mino_at(X-1,Y,N+1):- field(X-1,Y), N+1 < S, maxsteps(S), mino_at(X,Y,N), going(left,N+1).
-mino_at(X+1,Y,N+1):- field(X+1,Y), N+1 < S, maxsteps(S), mino_at(X,Y,N), going(right,N+1).
-mino_at(X,Y-1,N+1):- field(X,Y-1), N+1 < S, maxsteps(S), mino_at(X,Y,N), going(up,N+1).
-mino_at(X,Y+1,N+1):- field(X,Y+1), N+1 < S, maxsteps(S), mino_at(X,Y,N), going(down,N+1).
+mino_at(X,Y,N+1)  :- field(X,Y),   N < 2*(S+1), maxsteps(S), mino_at(X,Y,N), going(none,N+1).
+mino_at(X-1,Y,N+1):- field(X-1,Y), N < 2*(S+1), maxsteps(S), mino_at(X,Y,N), going(left,N+1).
+mino_at(X+1,Y,N+1):- field(X+1,Y), N < 2*(S+1), maxsteps(S), mino_at(X,Y,N), going(right,N+1).
+mino_at(X,Y-1,N+1):- field(X,Y-1), N < 2*(S+1), maxsteps(S), mino_at(X,Y,N), going(up,N+1).
+mino_at(X,Y+1,N+1):- field(X,Y+1), N < 2*(S+1), maxsteps(S), mino_at(X,Y,N), going(down,N+1).
 
 
 #show at/3.
