@@ -90,12 +90,12 @@ going(none,N)  :- want(left,N),   not can (left,N), no_vertical_movement(N).
 going(none,N)  :- want(right,N),  not can (right,N), no_vertical_movement(N).
 going(none,N)  :- want(none,N).
 
-mino_at(X,Y,N+1)  :- mino_at(X,Y,N), going(none,N+1).
-mino_at(X-1,Y,N+1):- mino_at(X,Y,N), going(left,N+1).
-mino_at(X+1,Y,N+1):- mino_at(X,Y,N), going(right,N+1).
-mino_at(X,Y-1,N+1):- mino_at(X,Y,N), going(up,N+1).
-mino_at(X,Y+1,N+1):- mino_at(X,Y,N), going(down,N+1).
-
+mino_at(X,Y,N+1)  :- field(X,Y),   N+1 < S, maxsteps(S), mino_at(X,Y,N), going(none,N+1).
+mino_at(X-1,Y,N+1):- field(X-1,Y), N+1 < S, maxsteps(S), mino_at(X,Y,N), going(left,N+1).
+mino_at(X+1,Y,N+1):- field(X+1,Y), N+1 < S, maxsteps(S), mino_at(X,Y,N), going(right,N+1).
+mino_at(X,Y-1,N+1):- field(X,Y-1), N+1 < S, maxsteps(S), mino_at(X,Y,N), going(up,N+1).
+mino_at(X,Y+1,N+1):- field(X,Y+1), N+1 < S, maxsteps(S), mino_at(X,Y,N), going(down,N+1).
 
 
 #show at/3.
+
